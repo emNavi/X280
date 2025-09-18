@@ -1,0 +1,12 @@
+[submodule "src/emnavi_sdk/emnv_ctl_bridge"]
+	path = src/emnavi_sdk/emnv_ctl_bridge
+	url = https://github.com/emNavi/emnv_ctl_bridge.git
+[submodule "src/emnavi_sdk/sensor_bridge_pkg"]
+	path = src/emnavi_sdk/sensor_bridge_pkg
+	url = https://github.com/emNavi/sensor_bridge_pkg.git
+[submodule "src/emnavi_sdk/hik_camera_ros_driver"]
+	path = src/emnavi_sdk/hik_camera_ros_driver
+	url = https://github.com/emNavi/hik_camera_ros_driver.git
+[submodule "src/emnavi_sdk/rtk_publisher"]
+	path = src/emnavi_sdk/rtk_publisher
+	url = https://github.com/emNavi/rtk_publisher.git

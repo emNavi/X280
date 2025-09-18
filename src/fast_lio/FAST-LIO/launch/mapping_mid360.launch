@@ -1,0 +1,32 @@
+<launch>
+	<arg name="rviz" default="false" />
+    <arg name="drone_id" default="1"/>
+    <arg name="drone_type" default="x280"/>
+
+	<group if="$(arg rviz)">
+		<node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find fast_lio)/rviz_cfg/loam_livox.rviz" />
+	</group>
+
+	<!-- 读取 fast-lio 参数 -->
+	<rosparam command="load" file="$(find global_interface)/config/fast_lio/mid360.yaml" />
+	<param name="feature_extract_enable" type="bool" value="0"/>
+	<param name="point_filter_num" type="int" value="3"/>
+	<param name="max_iteration" type="int" value="3" />
+	<param name="filter_size_surf" type="double" value="0.5" />
+	<param name="filter_size_map" type="double" value="0.5" />
+	<param name="cube_side_length" type="double" value="1000" />
+	<param name="runtime_pos_log_enable" type="bool" value="0" />
+
+	<!-- 启动 fast-lio 激光里程计 -->
+	<node pkg="fast_lio" type="fastlio_mapping" name="fastlio" output="screen" >
+		<!-- TODO(Derkai): 因为海康的包引用bug，这里只能手动引用 -->
+		<env name="LD_PRELOAD" value="/usr/lib/aarch64-linux-gnu/libusb-1.0.so"/>
+		<remap from="/Odometry"   to="fastlio_odom"/>
+		<remap from="/cloud_registered"   to="fastlio_pointcloud"/>
+		<remap from="/fastlio_path"   to="fastlio_path"/>
+		<remap from="/fastlio_color_pointcloud"   to="fastlio_color_pointcloud"/>
+		<!-- <remap from="/livox/lidar"   to="/$(arg drone_type)_$(arg drone_id)/livox/lidar"/>
+		<remap from="/livox/imu"   to="/$(arg drone_type)_$(arg drone_id)/livox/imu"/> -->
+	</node>
+
+</launch>

@@ -1,0 +1,51 @@
+common:
+    lid_topic:  "/livox/lidar"
+    imu_topic:  "/mavros/imu/data_raw"
+    time_sync_en: true         # ONLY turn on when external time synchronization is really not possible
+    time_offset_lidar_to_imu: 0.0 # Time offset between lidar and IMU calibrated by other algorithms, e.g. LI-Init (can be found in README).
+                                  # This param will take effect no matter what time_sync_en is. So if the time offset is not known exactly, please set as 0.0
+
+preprocess:
+    lidar_type: 1                # 1 for Livox serials LiDAR, 2 for Velodyne LiDAR, 3 for ouster LiDAR, 
+    scan_line: 4
+    blind: 0.5
+
+mapping:
+    acc_cov: 0.1
+    gyr_cov: 0.1
+    b_acc_cov: 0.0001
+    b_gyr_cov: 0.0001
+    fov_degree:    360
+    det_range:     100.0
+    extrinsic_est_en:  false      # true: enable the online estimation of IMU-LiDAR extrinsic
+    extrinsic_T: [0.051666, 0.057866, 0.060058 ]
+    
+    extrinsic_R: [-0.930166,  0.033489,  0.365608,
+                  -0.023095, -0.999196,  0.032769,
+                   0.366411,  0.022037, 0.930192]
+
+publish:
+    path_en:  false
+    scan_publish_en:  true       # false: close all the point cloud output
+    dense_publish_en: true       # false: low down the points number in a global-frame point clouds scan.
+    scan_bodyframe_pub_en: true  # true: output the point cloud scans in IMU-body-frame
+
+pcd_save:
+    pcd_save_en: false
+    interval: -1                 # how many LiDAR frames saved in each pcd file; 
+                                 # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.
+
+# -0.929645  0.044600  0.365747  0.038083
+# -0.037871 -0.998956  0.025556  0.006170
+#  0.366505  0.009907  0.930363  0.043839
+#  0.000000  0.000000  0.000000  1.000000
+
+#  -0.928889  0.040881  0.368095  0.049047
+# -0.029085 -0.998872  0.037539  0.037373
+#  0.369215  0.024163  0.929030  0.063388
+#  0.000000  0.000000  0.000000  1.000000
+
+# -0.930166  0.033489  0.365608  0.051666
+# -0.023095 -0.999196  0.032769  0.057866
+#  0.366411  0.022037  0.930192  0.060058
+#  0.000000  0.000000  0.000000  1.000000

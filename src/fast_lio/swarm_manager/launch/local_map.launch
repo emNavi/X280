@@ -1,0 +1,4 @@
+<launch>
+    <node name = "local_map_node" pkg = "lio2world" type = "local_map_node" output = "screen">
+    </node>
+</launch>

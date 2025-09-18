@@ -1,0 +1,10 @@
+<launch>
+    <arg name="drone_type" default="x280"/>
+    <arg name="drone_id" default="1"/>
+    <!-- 把全局话题都转为单机局部话题，用类型+ID分组，这样多机就不会冲突, 该节点开启之后，由它开启的节点都会被分组至 /$(arg drone_type)_$(arg drone_id)/ 下面 -->
+	<group ns="$(arg drone_type)_$(arg drone_id)">
+        <node name="remote_script_executor" pkg="global_interface" type="remote_script_executor" output="screen" >
+            <remap from="/uav_run_script" to="/$(arg drone_type)_$(arg drone_id)/uav_run_script"/>
+        </node>
+    </group>
+</launch>

@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="swarm_manager" type="msg_compress_send" name="msg_compress_send" output="screen" /> 
+</launch>

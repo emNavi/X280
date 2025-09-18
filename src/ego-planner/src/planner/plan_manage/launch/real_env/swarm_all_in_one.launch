@@ -1,0 +1,70 @@
+<launch>
+    <arg name="drone_type" default="x280" />
+    <arg name="drone_id" default="1" />
+
+    <!-- topic of your odometry such as VIO or LIO -->
+    <arg name="odom_topic" value="/$(arg drone_type)_$(arg drone_id)/global_fastlio_odom"/>
+    <arg name="Point_Cloud" value="/$(arg drone_type)_$(arg drone_id)/local_map"/>
+    <arg name="depth_camera_topic" value="/test_drone_detect/new_depth_image"/>
+    
+    <!--run_egoplanner.sh里面会频繁修改的数据-->
+    <arg name="flight_type" default="1" />
+    <arg name="ego_swarm_flage" default="false"/>
+    <arg name="max_vel" default="0.5"/>
+    <arg name="max_acc" default="0.5"/>
+    <arg name="cx" default="0.0"/>
+    <arg name="cy" default="0.0"/>
+    <arg name="fx" default="0.0"/>
+    <arg name="fy" default="0.0"/>
+
+  <include file="$(find global_interface)/config/ego_plan/param.xml">
+    <arg name="drone_id" value="$(arg drone_id)"/>
+    <arg name="odometry_topic" value="$(arg odom_topic)"/>
+    <arg name="ego_swarm_flage" value="$(arg ego_swarm_flage)"/>
+    <arg name="max_vel" value="$(arg max_vel)"/>
+    <arg name="max_acc" value="$(arg max_acc)"/>
+
+    <!-- topic of point cloud measurement, such as from LIDAR  -->
+    <!-- don't set camera pose and depth, if you already set this one! -->
+    <arg name="cloud_topic" value="$(arg Point_Cloud)"/>
+
+    <!-- camera pose: transform of camera frame in the world frame -->
+    <!-- depth topic: depth image, 640x480 by default -->
+    <!-- don't set cloud_topic if you already set these ones! -->
+    <arg name="camera_pose_topic" value="pcl_render_node/camera_pose"/>
+    <arg name="depth_topic" value="$(arg depth_camera_topic)"/>
+    <arg name="cx" value="$(arg cx)"/>
+    <arg name="cy" value="$(arg cy)"/>
+    <arg name="fx" value="$(arg fx)"/>
+    <arg name="fy" value="$(arg fy)"/>
+
+ <!-- <node pkg="local_sensing_node" type="pcl_render_node" name="drone_$(arg drone_id)_pcl_render_node" output="screen"> -->
+   <node pkg="local_sensing_node" type="pcl_render_node" name="drone_$(arg drone_id)_pcl_render_node" output="screen">
+        <rosparam command="load" file="$(find local_sensing_node)/params/camera.yaml" />
+        <param name="sensing_horizon"  value="5.0" />
+        <param name="sensing_rate"     value="30.0"/>
+        <param name="estimation_rate"  value="30.0"/>
+
+        <param name="map/x_size"     value="$(arg map_size_x_)"/>
+        <param name="map/y_size"     value="$(arg map_size_y_)"/>
+        <param name="map/z_size"     value="$(arg map_size_z_)"/>
+
+        <remap from="~global_map" to="/map_generator/global_cloud"/>
+        <remap from="~odometry"   to="/drone_$(arg drone_id)_$(arg odometry_topic)"/>
+        <remap from="~pcl_render_node/cloud"   to="/drone_$(arg drone_id)_pcl_render_node/cloud"/>
+  </node>
+    <!-- 1: use 2D Nav Goal to select goal  -->
+    <!-- 2: use global waypoints below  -->
+    <!-- 4: use REMOTE_TARGET  -->
+    <!-- 5: use REMOTE_START  -->
+    <arg name="flight_type" value="$(arg flight_type)" />
+  </include>
+
+    <!-- trajectory server -->
+    <node pkg="ego_planner" name="drone_$(arg drone_id)_traj_server" type="traj_server" output="screen">
+        <remap from="position_cmd" to="drone_$(arg drone_id)_planning/pos_cmd"/>
+        <remap from="~planning/bspline" to="drone_$(arg drone_id)_planning/bspline"/>
+        <param name="traj_server/time_forward" value="3.0" type="double"/>
+    </node>
+
+</launch>

@@ -1,0 +1,27 @@
+<launch>
+  <arg name="drone_id" default="1"/>
+  <!-- <arg name="odom_topic" default="/quadrotor_control/odom"/> -->
+  <arg name="odom_topic" default="/global_fastlio_odom"/>
+
+  <!-- Launch ROS Package Template Node -->
+  <node pkg="drone_detect" type="drone_detect" name="test_drone_detect_$(arg drone_id)" output="screen">
+    <rosparam command="load" file="$(find drone_detect)/config/depth_camera.yaml" />
+    <rosparam command="load" file="$(find drone_detect)/config/default.yaml"/>
+    <param name="my_id"      value="$(arg drone_id)" />
+    <param name="debug_flag" value="true" />
+    <remap from="~odometry"   to="$(arg odom_topic)"/>
+    <remap from="~depth" to="/camera/depth/image_rect_raw"/>
+
+    <remap from="/test_drone_detect_$(arg drone_id)/debug_depth_image"   to="/test_drone_detect/debug_depth_image"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/drone0to2_pose_err"   to="/test_drone_detect/drone0to2_pose_err"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/drone1to2_pose_err"   to="/test_drone_detect/drone1to2_pose_err"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/drone3to2_pose_err"   to="/test_drone_detect/drone3to2_pose_err"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/drone4to2_pose_err"   to="/test_drone_detect/drone4to2_pose_err"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/drone5to2_pose_err"   to="/test_drone_detect/drone5to2_pose_err"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/drone6to2_pose_err"   to="/test_drone_detect/drone6to2_pose_err"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/drone7to2_pose_err"   to="/test_drone_detect/drone7to2_pose_err"/>
+    <remap from="/test_drone_detect_$(arg drone_id)/new_depth_image"   to="/test_drone_detect/new_depth_image"/>
+
+  </node>
+
+</launch>

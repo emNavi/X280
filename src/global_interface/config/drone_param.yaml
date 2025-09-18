@@ -1,0 +1,19 @@
+# 飞机型号
+drone_type: x280
+# 飞机编号
+drone_id: 1
+
+# 起飞高度
+takeoff_height: 0.5
+racer_x: 0.0
+racer_y: 0.0
+racer_z: 0.0
+
+# QGC 连接 IP
+gcs_udp_ip: 10.42.0.191
+
+# 飞行速度、加速度
+max_vel: 1
+max_acc: 1
+ego_swarm_flage: false # 不使用集群飞行就设置为 false
+flight_type: 1 # 1: 使用 2D Nav Goal 选择目标点  2: 使用预设全局航路点

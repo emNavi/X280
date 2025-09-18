@@ -1,0 +1,52 @@
+common:
+    lid_topic:  "/livox/lidar"
+    imu_topic:  "/mavros/imu/data_raw"
+    #imu_topic:  "/livox/imu"
+    time_sync_en: true         # ONLY turn on when external time synchronization is really not possible
+    time_offset_lidar_to_imu: 0.0 # Time offset between lidar and IMU calibrated by other algorithms, e.g. LI-Init (can be found in README).
+                                  # This param will take effect no matter what time_sync_en is. So if the time offset is not known exactly, please set as 0.0
+
+preprocess:
+    lidar_type: 1                # 1 for Livox serials LiDAR, 2 for Velodyne LiDAR, 3 for ouster LiDAR, 
+    scan_line: 4
+    blind: 0.5
+
+mapping:
+    acc_cov: 0.1
+    gyr_cov: 0.1
+    b_acc_cov: 0.0001
+    b_gyr_cov: 0.0001
+    fov_degree:    360
+    det_range:     100.0
+    extrinsic_est_en:  true      # true: enable the online estimation of IMU-LiDAR extrinsic
+    extrinsic_T: [-0.013350, 0.000200, 0.140408 ]
+    
+    extrinsic_R: [-0.924231,  0.009027,  0.381728,
+                  -0.010611, -0.999942, -0.002047,
+                   0.381687, -0.005943,  0.924273]
+    # extrinsic_T: [0.051666, 0.057866, 0.060058 ]
+    
+    # extrinsic_R: [-0.930166,  0.033489,  0.365608,
+    #               -0.023095, -0.999196,  0.032769,
+    #                0.366411,  0.022037, 0.930192]
+
+# -0.924231  0.009027  0.381728 -0.013350
+# -0.010611 -0.999942 -0.002047  0.000200
+#  0.381687 -0.005943  0.924273  0.140408
+#  0.000000  0.000000  0.000000  1.000000
+
+# -0.924630  0.014154  0.380604 -0.019070
+# -0.015211 -0.999884  0.000233  0.001463
+#  0.380563 -0.005574  0.924738  0.130500
+#  0.000000  0.000000  0.000000  1.000000
+
+publish:
+    path_en:  false
+    scan_publish_en:  true       # false: close all the point cloud output
+    dense_publish_en: true       # false: low down the points number in a global-frame point clouds scan.
+    scan_bodyframe_pub_en: true  # true: output the point cloud scans in IMU-body-frame
+
+pcd_save:
+    pcd_save_en: true
+    interval: 100                 # how many LiDAR frames saved in each pcd file; 
+                                 # -1 : all frames will be saved in ONE pcd file, may lead to memory crash when having too much frames.

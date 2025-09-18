@@ -1,0 +1,45 @@
+fsm/waypoint_num: 2
+#1，2都来回起降同第一类点
+#3起降第二个点一次
+#4，5过障碍物，起降两次，两套不同的点
+
+#导航点
+fsm/waypoint0_x:  1.91
+fsm/waypoint0_y:  1.2
+fsm/waypoint0_z:  1.5
+
+fsm/waypoint1_x:  4.52
+fsm/waypoint1_y:  1.8
+fsm/waypoint1_z:  -0.5
+
+fsm/waypoint2_x:  4.6
+fsm/waypoint2_y:  1.8
+fsm/waypoint2_z:  0.6
+
+fsm/waypoint3_x:  3.05
+fsm/waypoint3_y:  -7.24
+fsm/waypoint3_z:  0.6
+
+fsm/waypoint4_x:  3.35
+fsm/waypoint4_y:  -9.12
+fsm/waypoint4_z:  0.6
+
+fsm/waypoint5_x:  0.0
+fsm/waypoint5_y:  0.0
+fsm/waypoint5_z:  0.6
+
+fsm/waypoint6_x:  12.5
+fsm/waypoint6_y:  1.25
+fsm/waypoint6_z:  0.6
+
+fsm/waypoint7_x:  9.0
+fsm/waypoint7_y:  1.25
+fsm/waypoint7_z:  0.6
+
+fsm/waypoint8_x:  2.5
+fsm/waypoint8_y:  1.25
+fsm/waypoint8_z:  0.6
+
+fsm/waypoint9_x:  1.0
+fsm/waypoint9_y:  0.0
+fsm/waypoint9_z:  0.6

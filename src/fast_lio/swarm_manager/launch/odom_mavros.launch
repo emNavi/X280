@@ -1,0 +1,5 @@
+<launch>
+    <remap from="/odom_mavros"   to="/mavros/vision_pose/pose"/>
+    
+    <node pkg="swarm_manager" type="swarm_manager" name="swarm_manager" output="screen" /> 
+</launch>
