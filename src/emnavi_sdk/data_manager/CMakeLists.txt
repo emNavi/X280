@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(swarm_manager)
+project(data_manager)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Release)
@@ -41,8 +41,8 @@ catkin_package(
   CATKIN_DEPENDS roscpp std_msgs livox_ros_driver2 cv_bridge
 )
 
-add_executable(swarm_manager src/swarm_manager.cpp)
-target_link_libraries(swarm_manager ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
+add_executable(data_manager src/data_manager.cpp)
+target_link_libraries(data_manager ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
 
 add_executable(racer_topic src/racer_topic.cpp)
 target_link_libraries(racer_topic ${catkin_LIBRARIES})

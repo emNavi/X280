@@ -278,7 +278,7 @@ ros::Time begin_time;
 int main(int argc, char** argv)
 {
     // 初始化ROS节点
-    ros::init(argc, argv, "swarm_manager");
+    ros::init(argc, argv, "data_manager");
     ros::NodeHandle nh;
     tf2_ros::TransformListener tf_listener(tf_buffer);
 

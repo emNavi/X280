@@ -7,7 +7,7 @@
 
 
     <!-- 集群管理 -->
-    <node pkg="swarm_manager" type="swarm_manager" name="swarm_manager" output="screen" > 
+    <node pkg="data_manager" type="data_manager" name="data_manager" output="screen" > 
         <rosparam command="load" file="$(find global_interface)/config/fast_lio/mid360.yaml" />
         <remap from="/fastlio_color_pointcloud"   to="fastlio_color_pointcloud"/>
         <remap from="/fastlio_odom"   to="fastlio_odom"/>
@@ -28,11 +28,11 @@
     </node>
 
     <!-- 集群压缩信息 -->
-    <node pkg="swarm_manager" type="msg_compress_send" name="msg_compress_send" output="screen" > 
+    <node pkg="data_manager" type="msg_compress_send" name="msg_compress_send" output="screen" > 
     </node>
 
     <!-- 本地地图维护 -->
-    <node name = "local_map" pkg = "swarm_manager" type = "local_map_node" output = "log">
+    <node name = "local_map" pkg = "data_manager" type = "local_map_node" output = "log">
         <remap from="/cloud_registered"   to="global_fastlio_pointcloud"/>
         <remap from="/global_fastlio_odom"   to="global_fastlio_odom"/>
         <remap from="/local_map"   to="local_map"/>
@@ -47,7 +47,7 @@
         <param name="clean_localmap" type="bool" value=" false "/>
     </node>
 
-    <node name = "racer_topic" pkg="swarm_manager" type="racer_topic" output = "log">
+    <node name = "racer_topic" pkg="data_manager" type="racer_topic" output = "log">
         <remap from="/drone_1/mavros/state" to="/drone_$(arg drone_id)/mavros/state"/>
         <remap from="/drone_1/ctrl_bridge/bridge_status" to="/drone_$(arg drone_id)/ctrl_bridge/bridge_status"/>
     </node>

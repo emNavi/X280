@@ -16,7 +16,7 @@ nodes=(
 /x280_2/local_map
 /x280_2/mavros
 /x280_2/racer_topic
-/x280_2/swarm_manager
+/x280_2/data_manager
 )
 
 for n in "${nodes[@]}"; do

@@ -1,0 +1,5 @@
+<launch>
+    <remap from="/odom_mavros"   to="/mavros/vision_pose/pose"/>
+    
+    <node pkg="data_manager" type="data_manager" name="data_manager" output="screen" /> 
+</launch>

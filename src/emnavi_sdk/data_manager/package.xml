@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>swarm_manager</name>
+  <name>data_manager</name>
   <version>0.0.0</version>
-  <description>The swarm_manager package</description>
+  <description>The data_manager package</description>
 
   <maintainer email="emnavi@todo.todo">emnavi</maintainer>
 
