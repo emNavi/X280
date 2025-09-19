@@ -98,6 +98,20 @@ void odomToUavWorldCallback(const nav_msgs::Odometry::ConstPtr& odom_msg)
     odom_out.pose.pose.orientation.y = q_new.y();
     odom_out.pose.pose.orientation.z = q_new.z();
     odom_out.pose.pose.orientation.w = q_new.w();
+
+
+    // === 新增 Twist 速度转换 ===
+    Eigen::Vector3d v_old(
+        odom_msg->twist.twist.linear.x,
+        odom_msg->twist.twist.linear.y,
+        odom_msg->twist.twist.linear.z
+    );
+
+    Eigen::Vector3d v_new = extrinsic.block<3,3>(0,0) * v_old;
+
+    odom_out.twist.twist.linear.x = v_new.x();
+    odom_out.twist.twist.linear.y = v_new.y();
+    odom_out.twist.twist.linear.z = v_new.z();
     pub_global_world_odom.publish(odom_out);
 
 

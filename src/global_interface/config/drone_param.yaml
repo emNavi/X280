@@ -13,7 +13,7 @@ racer_z: 0.0
 gcs_udp_ip: 10.42.0.191
 
 # 飞行速度、加速度
-max_vel: 1
-max_acc: 1
+max_vel: 1.0
+max_acc: 1.0
 ego_swarm_flage: false # 不使用集群飞行就设置为 false
 flight_type: 1 # 1: 使用 2D Nav Goal 选择目标点  2: 使用预设全局航路点

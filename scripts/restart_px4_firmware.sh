@@ -8,15 +8,15 @@ rosrun emnv_ctl_bridge reboot_px4_system.py && sleep 1;
 
 nodes=(
 /rosout
-/x280_1/ctrl_bridge
-/x280_1/drone_1_ego_planner_node
-/x280_1/drone_1_traj_server
-/x280_1/fastlio
-/x280_1/livox_lidar_publisher
-/x280_1/local_map
-/x280_1/mavros
-/x280_1/racer_topic
-/x280_1/swarm_manager
+/x280_2/ctrl_bridge
+/x280_2/drone_1_ego_planner_node
+/x280_2/drone_1_traj_server
+/x280_2/fastlio
+/x280_2/livox_lidar_publisher
+/x280_2/local_map
+/x280_2/mavros
+/x280_2/racer_topic
+/x280_2/swarm_manager
 )
 
 for n in "${nodes[@]}"; do

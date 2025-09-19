@@ -2,9 +2,9 @@
     <!-- 1. 启动 mavros 和 控制驱动-->
     <arg name="drone_type" default="x280"/>
     <arg name="drone_id" default="1"/>
-    <arg name="gcs_udp_ip" default="10.42.0.191"/>
+    <arg name="gcs_udp_ip" default="10.42.0.108"/>
     <arg name="takeoff_height" default="0.5"/>
-    <include file="$(find emnv_ctl_bridge)/launch/real_flight/ctrl_bridge.launch">
+    <include file="$(find emnv_ctl_bridge)/launch/real_flight/single_ctrl_bridge.launch">
         <arg name="drone_id" value="$(arg drone_id)"/>
         <arg name="fcu_url" value="/dev/ttyACM0:921600"/>
         <arg name="gcs_udp_ip" value="$(arg gcs_udp_ip)"/>
@@ -17,9 +17,8 @@
     <!-- 3. 启动激光雷达 -->
     <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch"></include>
 
-    <!-- 4. 启动海康相机-->
+    <!-- 4. 启动相机-->
     <!-- <include file="$(find hik_camera_driver)/launch/camera.launch"></include> -->
-
     <include file="$(find realsense_driver)/launch/rs_d455_camera.launch"></include>
 
     <!-- 5. 接收 RTK 真值定位 -->
