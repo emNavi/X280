@@ -55,7 +55,7 @@ private:
     ros::Publisher pub_;
 };
 
-
+// TODO(): 暂未使用
 void cloudCallback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 {
     // 转换为 PCL 格式（不带颜色）
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "msg_compress_send");
     ros::NodeHandle nh;
     ImageCompressor compressor(nh);
-    ros::Subscriber sub = nh.subscribe("global_fastlio_pointcloud_2", 10, cloudCallback);
+    // ros::Subscriber sub = nh.subscribe("global_fastlio_pointcloud_2", 10, cloudCallback);
     // ros::Subscriber img_sub = nh.subscribe("camera/color/image_raw/compressed", 10, imageCallback);
     // ROS_INFO("Listening to /cloud_registered ...");
     ros::spin();

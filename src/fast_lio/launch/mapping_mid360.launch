@@ -25,8 +25,6 @@
 		<remap from="/cloud_registered"   to="fastlio_pointcloud"/>
 		<remap from="/fastlio_path"   to="fastlio_path"/>
 		<remap from="/fastlio_color_pointcloud"   to="fastlio_color_pointcloud"/>
-		<!-- <remap from="/livox/lidar"   to="/$(arg drone_type)_$(arg drone_id)/livox/lidar"/>
-		<remap from="/livox/imu"   to="/$(arg drone_type)_$(arg drone_id)/livox/imu"/> -->
 	</node>
 
 </launch>

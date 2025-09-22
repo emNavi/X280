@@ -1,4 +1,7 @@
 <launch>
+  <arg name="drone_id" default="1" />
+  <arg name="drone_type" default="x280" />
+
   <!-- 设置地图边界（超出该区域的不会被建图） -->
   <arg name="map_size_x_" value="50.0"/>
   <arg name="map_size_y_" value="50.0"/>
@@ -18,33 +21,29 @@
 
   <arg name="use_distinctive_trajs" default="true" />
   <arg name="obj_num_set" default="10" />
-  <arg name="drone_id" default="1" />
-  <arg name="drone_type" default="x280" />
+
   <!-- 1: use 2D Nav Goal to select goal  -->
   <!-- 2: use global waypoints below  -->
   <!-- 4: use REMOTE_TARGET  -->
   <!-- 5: use REMOTE_START  -->
   <arg name="flight_type"/>
-  
+
   <arg name="odometry_topic"/>
   <arg name="camera_pose_topic"/>
   <arg name="depth_topic"/>
-  <!-- 未选配激光雷达的设备暂未启用 -->
-  <arg name="cloud_topic"/>
   <arg name="ego_swarm_flage" default="false"/>
 
   <!-- main node -->
   <node pkg="ego_planner" name="drone_$(arg drone_id)_ego_planner_node" type="ego_planner_node" output="screen">
-    <remap from="/uav_goal" to="/$(arg drone_type)_$(arg drone_id)/uav_goal"/>
-
-    <remap from="~odom_world" to="$(arg odometry_topic)"/>
+    <remap from="/uav_goal" to="uav_goal"/>
+    <remap from="~odom_world" to="global_fastlio_odom"/>
     <remap from="~planning/bspline" to = "/drone_$(arg drone_id)_planning/bspline"/>
     <remap from="~planning/data_display" to = "/drone_$(arg drone_id)_planning/data_display"/>
     <remap from="~planning/broadcast_bspline_from_planner" to = "/broadcast_bspline"/>
     <remap from="~planning/broadcast_bspline_to_planner" to = "/broadcast_bspline2"/>
 
-    <remap from="~grid_map/odom" to="$(arg odometry_topic)"/>
-    <remap from="~grid_map/cloud" to="/$(arg cloud_topic)"/>
+    <remap from="~grid_map/odom" to="global_fastlio_odom"/>
+    <remap from="~grid_map/cloud" to="local_map"/>
     <remap from="~grid_map/pose"   to = "/drone_$(arg drone_id)_$(arg camera_pose_topic)"/> 
     <remap from="~grid_map/depth" to = "$(arg depth_topic)"/>
     
@@ -61,10 +60,6 @@
     <param name="fsm/fail_safe" value="true"/>
 
     <!-- 预设目标点数目标点为相对里程计初始化点的x、y、z坐标，单位 m  -->
-    <!-- <param name="fsm/waypoint_num"      value="0" />  -->
-    <!-- <param name="fsm/waypoint0_x"      value="0" />  -->
-    <!-- <param name="fsm/waypoint0_y"      value="0" />  -->
-    <!-- <param name="fsm/waypoint0_z"      value="0" />  -->
     <rosparam command="load" file="$(find global_interface)/config/ego_plan/point_param.yaml" />
 
     <!-- 栅格地图分辨率，太大了会钻不了缝隙，太小了就很占资源 -->

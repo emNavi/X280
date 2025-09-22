@@ -3,8 +3,6 @@
     <arg name="drone_id" default="1" />
 
     <!-- topic of your odometry such as VIO or LIO -->
-    <arg name="odom_topic" value="/$(arg drone_type)_$(arg drone_id)/global_fastlio_odom"/>
-    <arg name="Point_Cloud" value="/$(arg drone_type)_$(arg drone_id)/local_map"/>
     <arg name="depth_camera_topic" value="/test_drone_detect/new_depth_image"/>
     
     <!--run_egoplanner.sh里面会频繁修改的数据-->
@@ -19,14 +17,12 @@
 
   <include file="$(find global_interface)/config/ego_plan/param.xml">
     <arg name="drone_id" value="$(arg drone_id)"/>
-    <arg name="odometry_topic" value="$(arg odom_topic)"/>
     <arg name="ego_swarm_flage" value="$(arg ego_swarm_flage)"/>
     <arg name="max_vel" value="$(arg max_vel)"/>
     <arg name="max_acc" value="$(arg max_acc)"/>
 
     <!-- topic of point cloud measurement, such as from LIDAR  -->
     <!-- don't set camera pose and depth, if you already set this one! -->
-    <arg name="cloud_topic" value="$(arg Point_Cloud)"/>
 
     <!-- camera pose: transform of camera frame in the world frame -->
     <!-- depth topic: depth image, 640x480 by default -->
