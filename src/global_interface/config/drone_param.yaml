@@ -3,17 +3,17 @@ drone_type: x280
 # 飞机编号
 drone_id: 1
 
-# 起飞高度
+# 起飞高度 m
 takeoff_height: 0.5
 racer_x: 0.0
 racer_y: 0.0
 racer_z: 0.0
 
-# QGC 连接 IP
+# 这里填写的是 QGC 地面站软件所在的主机的IP地址，需要能访问到无人机网络
 gcs_udp_ip: 10.42.0.191
 
-# 飞行速度、加速度
+# 自主规划时飞行速度 m/s、加速度 m/s²
 max_vel: 1.0
 max_acc: 1.0
 ego_swarm_flage: false # 不使用集群飞行就设置为 false
-flight_type: 2 # 1: 使用 2D Nav Goal 选择目标点  2: 使用预设全局航路点
+flight_type: 2 # 1: 使用 2D Nav Goal 手动选择导航点  2: 使用预设全局导航点
