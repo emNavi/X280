@@ -1,12 +1,8 @@
 <launch>
     <arg name="drone_id" default="1"/>
     <arg name="drone_type" default="x280"/>
-    <arg name="racer_x" default="0.0"/>	
-    <arg name="racer_y" default="0.0"/>
-    <arg name="racer_z" default="0.0"/>
 
-
-    <!-- 集群管理 -->
+    <!-- 数据管理 -->
     <node pkg="data_manager" type="data_manager" name="data_manager" output="screen" > 
         <rosparam command="load" file="$(find global_interface)/config/fast_lio/mid360.yaml" />
         <remap from="/fastlio_color_pointcloud"   to="fastlio_color_pointcloud"/>
@@ -18,16 +14,9 @@
         <remap from="/global_fastlio_path"   to="global_fastlio_path"/>
         <remap from="/global_fastlio_pointcloud"   to="global_fastlio_pointcloud"/>
         <remap from="odom_mavros"   to="mavros/vision_pose/pose"/>
-        <remap from="/odom_racer"   to="/racer_$(arg drone_id)"/>
-        <remap from="/pose_racer"   to="/pose_racer_$(arg drone_id)"/>
-
-        <param name="racer_x" value="$(arg racer_x)" type="double"/>
-        <param name="racer_y" value="$(arg racer_y)" type="double"/>
-        <param name="racer_z" value="$(arg racer_z)" type="double"/>
-        <param name="odom_racer_id" value="$(arg drone_id)" type="string"/>
     </node>
 
-    <!-- 集群压缩信息 -->
+    <!-- 压缩信息用于给主机可视化 -->
     <node pkg="data_manager" type="msg_compress_send" name="msg_compress_send" output="screen" > 
     </node>
 
@@ -46,11 +35,5 @@
         <param name="downsampleCloud_max" type="double" value=" 0.05 "/>
         <param name="clean_localmap" type="bool" value=" false "/>
     </node>
-
-    <node name = "racer_topic" pkg="data_manager" type="racer_topic" output = "log">
-        <remap from="/drone_1/mavros/state" to="/drone_$(arg drone_id)/mavros/state"/>
-        <remap from="/drone_1/ctrl_bridge/bridge_status" to="/drone_$(arg drone_id)/ctrl_bridge/bridge_status"/>
-    </node>
-
 
 </launch>

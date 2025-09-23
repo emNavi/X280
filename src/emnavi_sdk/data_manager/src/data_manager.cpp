@@ -41,10 +41,8 @@ tf2_ros::Buffer tf_buffer;
 using namespace Eigen;
 Eigen::Matrix4d extrinsic = Eigen::Matrix4d::Identity();
 
-ros::Subscriber odom_sub_racer, sub_uav_odom, sub_uav_path, sub_uav_pc;
-ros::Publisher pub_odom_mavros, pub_odom_racer, pub_pose_racer, pub_global_world_odom, pub_global_world_path, pub_global_world_pc;
-std::string odom_racer_id= "1" ;
-float racer_x = 0, racer_y = 0, racer_z = 0;
+ros::Subscriber sub_uav_odom, sub_uav_path, sub_uav_pc;
+ros::Publisher pub_odom_mavros, pub_global_world_odom, pub_global_world_path, pub_global_world_pc;
 bool odom_enable=false;
 
 // 用于检查话题是否存在
@@ -197,83 +195,6 @@ double diff_pose[3]={},dit_time=20;
 double fast_pose_diff_X=0, fast_pose_diff_Y=0, fast_pose_diff_Z=0;
 double get_roll=0, get_pitch=0, get_yaw=0;
 
-// 用于估计无人机初始偏差位置
-void odom_racercall(const nav_msgs::Odometry::ConstPtr& odom_msg)
-{
-    if( dit_time >0 ){//采样20次，耗时20/10=2秒
-        diff_pose[0] +=  odom_msg->pose.pose.position.x;
-        diff_pose[1] +=  odom_msg->pose.pose.position.y;
-        diff_pose[2] +=  odom_msg->pose.pose.position.z;
-        dit_time--;
-    }
-    else if( dit_time==0 ) 
-    {
-        diff_pose[0] /= 20;
-        diff_pose[1] /= 20;
-        diff_pose[2] /= 20;
-        dit_time--;
-        std::cout << "diff_pose: " << "x = " << diff_pose[0] << " y = "<< diff_pose[1] << " z = "<< diff_pose[2]<< " m" <<std::endl;
-        ros::param::set("fast_odom_diff_X",diff_pose[0]);
-        ros::param::set("fast_odom_diff_Y",diff_pose[1]);
-        ros::param::set("fast_odom_diff_Z",diff_pose[2]);
-        //四元素转欧拉角
-	tf::Quaternion quat;
-	tf::quaternionMsgToTF(odom_msg->pose.pose.orientation, quat);
-	tf::Matrix3x3(quat).getRPY(get_roll, get_pitch, get_yaw);
-    get_roll*=57.3f;
-    get_pitch*=57.3f;
-    get_yaw*=57.3f;
-    std::cout << "init_angle: rol = " << get_roll << " pit = "<< get_pitch<< " yaw = " << get_yaw << "  angle" <<std::endl;
-
-        if( (get_roll >-5 && get_roll<5) && (get_pitch >-5 && get_pitch<5) && (get_yaw >-5 && get_yaw<5) )//假定初始化角度偏移 5度
-        {
-            if( (diff_pose[0] >-0.5 && diff_pose[0]<0.5) && (diff_pose[1] >-0.5 && diff_pose[1]<0.5) && (diff_pose[2] >-0.5 && diff_pose[2]<0.5) )
-            ROS_INFO("drone_odom_succed");;
-        }
-        else
-        {
-            ROS_WARN("drone_odom_errors");
-            system("rosnode kill -a");//关闭所有节点
-        }
-    }
-    // 创建一个PoseStamped消息
-    nav_msgs::Odometry odom_racer;
-    if(dit_time < 0)
-    {
-        odom_racer.header.frame_id = "uav_world";
-        odom_racer.header.stamp = odom_msg->header.stamp;
-        odom_racer.child_frame_id = odom_racer_id;
-        odom_racer.pose.pose.orientation =  odom_msg->pose.pose.orientation ;
-        odom_racer.twist = odom_msg->twist;
-        //除了这个基本都改
-        odom_racer.pose.pose.position.x =  odom_msg->pose.pose.position.x + racer_x -diff_pose[0];
-        odom_racer.pose.pose.position.y =  odom_msg->pose.pose.position.y + racer_y -diff_pose[1];
-        odom_racer.pose.pose.position.z =  odom_msg->pose.pose.position.z + racer_z -diff_pose[2];
-        // 发布PoseStamped消息
-        pub_odom_racer.publish(odom_racer);
-
-        geometry_msgs::PoseStamped posesracer;
-
-        // 设置header
-        posesracer.header.stamp = ros::Time::now();
-        posesracer.header.frame_id = "uav_world";
-        // 设置pose
-        posesracer.pose.position.x =  odom_msg->pose.pose.position.x + racer_x -diff_pose[0];
-        posesracer.pose.position.y =  odom_msg->pose.pose.position.y + racer_y -diff_pose[1];
-        posesracer.pose.position.z =  odom_msg->pose.pose.position.z + racer_z -diff_pose[2];
-
-        posesracer.pose.orientation.x =  odom_msg->pose.pose.orientation.x;
-        posesracer.pose.orientation.y =  odom_msg->pose.pose.orientation.y;
-        posesracer.pose.orientation.z =  odom_msg->pose.pose.orientation.z;
-        posesracer.pose.orientation.w =  odom_msg->pose.pose.orientation.w;
-        pub_pose_racer.publish(posesracer);
-
-        ros::param::set("fast_pose_diff_X",posesracer.pose.position.x);
-        ros::param::set("fast_pose_diff_Y",posesracer.pose.position.y);
-        ros::param::set("fast_pose_diff_Z",posesracer.pose.position.z);
-    }
-}
-
 ros::Time begin_time;
 int main(int argc, char** argv)
 {
@@ -285,22 +206,15 @@ int main(int argc, char** argv)
     std::string base_name = ros::this_node::getName();
     
     // 订阅odom话题
-    odom_sub_racer = nh.subscribe("/global_fastlio_odom", 1000, odom_racercall);
     sub_uav_odom = nh.subscribe<nav_msgs::Odometry>("/fastlio_odom", 10, odomToUavWorldCallback);
     sub_uav_path = nh.subscribe<nav_msgs::Path>("/fastlio_path", 10, pathToUavWorldCallback);
     sub_uav_pc = nh.subscribe<sensor_msgs::PointCloud2>("/fastlio_pointcloud", 10, cloudToUavWorldCallback);
 
     // 发布PoseStamped话题
     pub_odom_mavros = nh.advertise<geometry_msgs::PoseStamped>("odom_mavros", 1000);
-    pub_odom_racer = nh.advertise<nav_msgs::Odometry>("odom_racer", 1000);
-    pub_pose_racer = nh.advertise<geometry_msgs::PoseStamped>("pose_racer", 1000);
     pub_global_world_odom = nh.advertise<nav_msgs::Odometry>("/global_fastlio_odom", 1000);
     pub_global_world_path = nh.advertise<nav_msgs::Path>("/global_fastlio_path", 1000);
     pub_global_world_pc = nh.advertise<sensor_msgs::PointCloud2>("/global_fastlio_pointcloud", 1000);
-    nh.getParam(base_name + "/racer_x",racer_x);
-    nh.getParam(base_name + "/racer_y",racer_y);
-    nh.getParam(base_name + "/racer_z",racer_z);
-    nh.getParam(base_name + "/odom_racer_id",odom_racer_id);
     begin_time=ros::Time::now(); 
     ros::Rate rate(10);
 

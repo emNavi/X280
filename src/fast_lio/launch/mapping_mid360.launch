@@ -19,8 +19,6 @@
 
 	<!-- 启动 fast-lio 激光里程计 -->
 	<node pkg="fast_lio" type="fastlio_mapping" name="fastlio" output="screen" >
-		<!-- TODO(Derkai): 因为海康的包引用bug，这里只能手动引用 -->
-		<env name="LD_PRELOAD" value="/usr/lib/aarch64-linux-gnu/libusb-1.0.so"/>
 		<remap from="/Odometry"   to="fastlio_odom"/>
 		<remap from="/cloud_registered"   to="fastlio_pointcloud"/>
 		<remap from="/fastlio_path"   to="fastlio_path"/>

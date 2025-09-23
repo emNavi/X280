@@ -30,8 +30,8 @@
         <arg name="drone_id" value="$(arg drone_id)"/>
     </include>
 
-    <!-- 7. 启动集群管理模块 -->
-    <include file="$(find data_manager)/launch/swarm_start.launch">
+    <!-- 7. 启动数据管理模块 -->
+    <include file="$(find data_manager)/launch/maneger_start.launch">
         <arg name="drone_type" value="$(arg drone_type)"/>
         <arg name="drone_id" value="$(arg drone_id)"/>
     </include>

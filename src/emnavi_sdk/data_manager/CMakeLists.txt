@@ -44,9 +44,6 @@ catkin_package(
 add_executable(data_manager src/data_manager.cpp)
 target_link_libraries(data_manager ${catkin_LIBRARIES} ${PCL_LIBRARIES} )
 
-add_executable(racer_topic src/racer_topic.cpp)
-target_link_libraries(racer_topic ${catkin_LIBRARIES})
-
 add_executable(msg_compress_send src/msg_compress_send.cpp)
 target_link_libraries(msg_compress_send ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 

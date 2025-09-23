@@ -15,7 +15,6 @@ nodes=(
 /x280_2/livox_lidar_publisher
 /x280_2/local_map
 /x280_2/mavros
-/x280_2/racer_topic
 /x280_2/data_manager
 )
 
