@@ -35,4 +35,10 @@
         <arg name="drone_type" value="$(arg drone_type)"/>
         <arg name="drone_id" value="$(arg drone_id)"/>
     </include>
+
+    <!-- 8. 启动远程可视化模块 -->
+	<include file="$(find foxglove_bridge)/launch/foxglove_bridge.launch">
+            <arg name="port" value="8765"/>
+    </include>
+
 </launch>
